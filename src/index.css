@@ -1,13 +1,63 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+#header {
+  font-size: clamp(12px, 2vw, 1em);
+  text-align: center;
+  padding: 0.1vw 0;
+  color: white;
+  background-color: rgb(80, 80, 80);
+}
+#create-page {
+  background-color: rgb(114, 114, 114);
+}
+#form {
+  margin: 0.5em auto;
+  background-color: white;
+  width: clamp(10px, 70vw, 900px);
+  border-radius: 10px;
+}
+h4 {
+  margin: 0 3vw;
+  color: rgb(83, 83, 83);
+}
+hr {
+  width: 80%;
+}
+#personal-information,
+#address,
+#more-info {
+  margin: 0vw 4vw;
+  padding: 1vw 0;
+}
+#submit {
+  margin: 0 35%;
+  background-color: rgb(32, 32, 32);
+  color: rgb(219, 219, 219);
+  font-size: 1em;
+  padding: 0.7em 2em;
+  border-radius: 10px;
+}
+#image-uploader {
+  margin: 0 3vw;
+}
+.message {
+  position: absolute;
+  margin: 0px 1.5em;
+  font-size: 0.7em;
+  color: rgb(199, 30, 30);
+}
+#success {
+  margin: 0;
+  color: rgb(29, 146, 29);
 }
