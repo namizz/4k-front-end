@@ -1,0 +1,25 @@
+.editbox {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  display: inline-block;
+  padding: 1em 0;
+  align-items: center;
+  margin-left: 3em;
+}
+.editboxinput {
+  background-color: rgb(199, 199, 199);
+  border: 0;
+  font-weight: 700;
+  font-size: 1em;
+  padding: 0.5em 1em;
+  margin: 0 0.3em;
+  border-radius: 5px;
+  width: 8em;
+}
+.editboxname {
+  margin: 0em;
+  margin-left: 1em;
+}
+#date_of_birthText {
+  height: 1.5em;
+  width: 11em;
+}

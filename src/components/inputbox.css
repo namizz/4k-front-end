@@ -25,10 +25,6 @@
 #date_of_birthText {
   width: 15.2em;
 }
-textarea {
-  width: 26em; /*not working*/
-  height: 7em;
-}
 #required {
   color: rgb(199, 30, 30);
 }

@@ -11,6 +11,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
 #header {
   font-size: clamp(12px, 2vw, 1em);
   text-align: center;
@@ -21,12 +22,19 @@ code {
 #create-page {
   background-color: rgb(114, 114, 114);
 }
-#form {
+#form,
+#update-form {
   margin: 0.5em auto;
-  background-color: white;
+  background-color: rgb(247, 247, 247);
   width: clamp(10px, 70vw, 900px);
   border-radius: 10px;
 }
+#update-form {
+  margin: 0em auto;
+  justify-items: center;
+  width: clamp(10px, 70vw, 550px);
+}
+
 h4 {
   margin: 0 3vw;
   color: rgb(83, 83, 83);
@@ -40,6 +48,19 @@ hr {
   margin: 0vw 4vw;
   padding: 1vw 0;
 }
+#upersonal-information,
+#uaddress,
+#umore-info {
+  margin: 0vw 0vw;
+  padding: 0vw 0;
+  display: flex;
+  align-items: flex-start;
+}
+#umore-infopart {
+  margin-left: 1em;
+  display: flex;
+  flex-wrap: wrap;
+}
 #submit {
   margin: 0 35%;
   background-color: rgb(32, 32, 32);
@@ -50,6 +71,12 @@ hr {
 }
 #image-uploader {
   margin: 0 3vw;
+}
+#editimage {
+  margin: 0;
+  height: clamp(10px, 50vw, 500px);
+  width: clamp(10px, 60vw, 500px);
+  object-fit: cover;
 }
 .message {
   position: absolute;

@@ -28,6 +28,7 @@ const FileUpload = ({ onFileSelect, display, imageLink }) => {
             style={
               display === "none" ? { width: "150px" } : { height: "110px" }
             }
+            id="prof-pic"
           />
         </div>
         <div className="text" style={{ display: display }}>
