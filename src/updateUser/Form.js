@@ -17,6 +17,7 @@ const UpdateForm = () => {
     img: "",
     fav_verse: "",
   });
+  const [update, setUpdate] = React.useState(false);
 
   React.useEffect(() => {
     const api = fetch("http://localhost:4000/4kfellowhship/15")
@@ -48,9 +49,25 @@ const UpdateForm = () => {
       [value]: !editor[value],
     }));
   };
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    const response = await fetch("http://localhost:4000/4kfellowhship/edit", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(Info),
+    });
+    if (!response.ok) {
+      console.log("Error in update");
+      return;
+    }
+    console.log(response.json());
+    setUpdate(true);
+  };
 
   return (
-    <form id="update-form">
+    <form id="update-form" onSubmit={handleUpdate}>
       <img src={Info.img} id="editimage" />
       <h4>PERSONAL INFORMATION</h4>
       <div id="upersonal-information">
@@ -154,7 +171,17 @@ const UpdateForm = () => {
         </div>
         <EditIcon onClick={EditMode} value="editmode3" />
       </div>
-      <button id="submit" type="submit" value="Update">
+      <p
+        style={
+          update
+            ? { display: "block", margin: "0 20%", fontWeight: 500 }
+            : { display: "none" }
+        }
+        id="success"
+      >
+        Update Successfully!!!
+      </p>
+      <button id="update" type="submit" value="Update">
         Update
       </button>
     </form>

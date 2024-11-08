@@ -61,13 +61,16 @@ hr {
   display: flex;
   flex-wrap: wrap;
 }
-#submit {
-  margin: 0 35%;
+#submit,
+#update {
   background-color: rgb(32, 32, 32);
   color: rgb(219, 219, 219);
   font-size: 1em;
   padding: 0.7em 2em;
   border-radius: 10px;
+}
+#submit {
+  margin: 0 35%;
 }
 #image-uploader {
   margin: 0 3vw;
