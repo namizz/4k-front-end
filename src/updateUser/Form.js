@@ -20,7 +20,7 @@ const UpdateForm = () => {
   const [update, setUpdate] = React.useState(false);
 
   React.useEffect(() => {
-    const api = fetch("http://localhost:4000/4kfellowhship/15")
+    const api = fetch("http://localhost:4000/4kfellowhship/1")
       .then((response) => response.json())
       .then((data) => {
         setInfo(data[0]);
@@ -62,13 +62,14 @@ const UpdateForm = () => {
       console.log("Error in update");
       return;
     }
-    console.log(response.json());
+    const result = await response.json(); // Wait for the result
+    console.log(result); // Log the response if needed
     setUpdate(true);
   };
 
   return (
     <form id="update-form" onSubmit={handleUpdate}>
-      <img src={Info.img} id="editimage" />
+      <img src={Info.img} id="editimage" alt="Profile" />
       <h4>PERSONAL INFORMATION</h4>
       <div id="upersonal-information">
         <div id="p-i">
@@ -97,7 +98,7 @@ const UpdateForm = () => {
           />
           <EditBox
             name="church"
-            p="Church"
+            p="Team"
             value={Info.church}
             change={handleChange}
             edit={editor.editmode1}

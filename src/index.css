@@ -35,7 +35,7 @@ code {
   width: clamp(10px, 70vw, 550px);
 }
 
-h4 {
+#h4 {
   margin: 0 3vw;
   color: rgb(83, 83, 83);
 }
@@ -91,3 +91,7 @@ hr {
   margin: 0;
   color: rgb(29, 146, 29);
 }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

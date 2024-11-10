@@ -110,7 +110,7 @@ const Form = () => {
   return (
     <form id="form" onSubmit={handleSubmit}>
       <div id="personal-information">
-        <h4>PERSONAL INFORMATION</h4>
+        <h4 id="h4">PERSONAL INFORMATION</h4>
         <InputBox
           name="firstname"
           p="First Name"
@@ -135,14 +135,14 @@ const Form = () => {
         />
         <InputBox
           name="church"
-          p="Church"
+          p="Team"
           value={Info.church}
           change={handleChange}
         />
       </div>
       <hr />
       <div id="address">
-        <h4>ADDRESS LINE</h4>
+        <h4 id="h4">ADDRESS LINE</h4>
         <InputBox
           name="country"
           p="Country"
@@ -173,7 +173,7 @@ const Form = () => {
       </div>
       <hr />
       <div id="more-info">
-        <h4>MORE INFORMATION</h4>
+        <h4 id="h4">MORE INFORMATION</h4>
         <InputBox
           name="department"
           p="Department"
