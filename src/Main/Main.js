@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Card from "../components/Card";
 
 const Header = () => {
@@ -27,21 +27,58 @@ const Welcome = () => {
 };
 const BibleQuote = ({ book, chapter, num, verse }) => {
   return (
-    <p className="p-3 px-10 font-semibold flex flex-col text-base mx-15">
-      <div className="font-jolly-lodger text-blue-950 flex justify-start text-sm">
-        Bible Verse
-      </div>
+    <div className="p-3 px-20 font-semibold flex flex-col text-base mx-15">
+      <p className="font-jolly-lodger text-blue-950 flex justify-start text-[1.3vw] px-[12%]">
+        ------------------Bible Verse---------------
+      </p>
       <div className="flex justify-center text-center">" {verse}" </div>
       <div className="text-custom-orange flex justify-end px-60">
         {book ? `${book}: ${chapter}:${num}` : "Loading book..."}{" "}
       </div>
-    </p>
+    </div>
   );
 };
+
 const CardBox = () => {
+  const [Info, setInfo] = React.useState([]);
+  React.useEffect(() => {
+    fetch("http://localhost:4000/4kfellowhship")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Http error");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setInfo(data);
+      })
+      .catch((err) => console.log("Error", err));
+  }, []);
+
   return (
-    <div className="border m-7 mx-28 flex h-96">
-      <Card />
+    <div className="m-7 mx-28 xl:mx-44 flex flex-wrap justify-evenly p-0">
+      {Info.length > 0 ? (
+        Info.filter((data) => data !== undefined).map((data) => {
+          console.log(data);
+          return data.phone ? (
+            <Card
+              key={data.id}
+              batch={data.batch}
+              firstname={data.firstname}
+              lastname={data.lastname}
+              phone={data.phone}
+              team={data.church}
+              img={data.img}
+              dept={data.department}
+              email={data.email}
+              faverse={data.fav_verse}
+              country={data.country.slice(0, 3).toUpperCase()}
+            />
+          ) : null;
+        })
+      ) : (
+        <p>Loading...</p>
+      )}
     </div>
   );
 };

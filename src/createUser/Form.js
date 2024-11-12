@@ -1,6 +1,7 @@
 import React from "react";
 import InputBox from "../components/InputBox";
 import Image from "../imageUploader/Image";
+import { useNavigate } from "react-router-dom";
 
 const Form = () => {
   //take the input in the frame element return it in to json file
@@ -72,6 +73,7 @@ const Form = () => {
     } else return true;
   };
 
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     //post the json file to the backend
@@ -88,6 +90,7 @@ const Form = () => {
         if (response.ok) {
           setSubmit("The Information has been Submitted!");
           setExisting("");
+          navigate("/");
 
           console.log("Data submitted successfully");
         } else {

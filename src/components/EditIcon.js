@@ -6,6 +6,7 @@ const EditIcon = (props) => {
       onClick={() => {
         props.onClick(props.value);
       }}
+      style={props.width ? { width: props.width, fontSize: "1vw" } : null}
     >
       <img
         src="https://cdn-icons-png.flaticon.com/512/8748/8748504.png"
