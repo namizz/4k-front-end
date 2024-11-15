@@ -18,6 +18,7 @@ const Form = () => {
     batch: "",
     img: "",
     fav_verse: "",
+    password: "",
   });
 
   const [required, setRequirement] = React.useState({

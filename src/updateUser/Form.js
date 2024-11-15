@@ -1,7 +1,7 @@
 import EditBox from "../components/EditBox";
 import React from "react";
 import EditIcon from "../components/EditIcon";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const UpdateForm = (props) => {
   const [Info, setInfo] = React.useState({
@@ -17,15 +17,20 @@ const UpdateForm = (props) => {
     batch: "",
     img: "",
     fav_verse: "",
+    password: "",
   });
 
   const [update, setUpdate] = React.useState(false);
+
+  // Initialize useNavigate hook here at the component level
+  const navigate = useNavigate();
 
   // Extract phone from the URL query parameter using useLocation
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const phone = searchParams.get("phone");
   console.log("phone", phone);
+
   React.useEffect(() => {
     fetch(`http://localhost:4000/4kfellowhship?phone=${phone || "0991065050"}`)
       .then((response) => response.json())
@@ -36,6 +41,7 @@ const UpdateForm = (props) => {
         console.log("Error fetching data:", err);
       });
   }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setInfo((prev) => ({
@@ -43,11 +49,13 @@ const UpdateForm = (props) => {
       [name]: value,
     }));
   };
+
   const [editor, setEditor] = React.useState({
     editmode1: false,
     editmode2: false,
     editmode3: false,
   });
+
   const EditMode = (value) => {
     console.log(value);
     setEditor(false);
@@ -56,8 +64,14 @@ const UpdateForm = (props) => {
       [value]: !editor[value],
     }));
   };
+
   const handleUpdate = async (e) => {
     e.preventDefault();
+
+    if (e.target.name === "skip") {
+      navigate("/"); // Now correctly using navigate here
+    }
+
     const response = await fetch(`http://localhost:4000/4kfellowhship/edit`, {
       method: "PATCH",
       headers: {
@@ -65,135 +79,232 @@ const UpdateForm = (props) => {
       },
       body: JSON.stringify(Info),
     });
+
     if (!response.ok) {
       console.log("Error in update");
       return;
     }
+
     const result = await response.json(); // Wait for the result
     console.log(result); // Log the response if needed
     setUpdate(true);
   };
-  console.log(Info);
 
-  return (
-    <form id="update-form" onSubmit={handleUpdate}>
-      <img src={Info.img} id="editimage" alt="Profile" />
-      <h4>PERSONAL INFORMATION</h4>
-      <div id="upersonal-information">
-        <div id="p-i">
-          <EditBox
-            p="First Name"
-            name="firstname"
-            value={Info.firstname}
-            onChange={handleChange}
-            edit={editor.editmode1}
-          />
-          <EditBox
-            name="lastname"
-            p="Last Name"
-            value={Info.lastname}
-            change={handleChange}
-            edit={editor.editmode1}
-          />
-          <br />
-          <EditBox
-            name="date_of_birth"
-            p="Date of Birth"
-            type="date"
-            value={Info.date_of_birth}
-            change={handleChange}
-            edit={editor.editmode1}
-          />
-          <EditBox
-            name="church"
-            p="Team"
-            value={Info.church}
-            change={handleChange}
-            edit={editor.editmode1}
-          />
-        </div>
-        <EditIcon onClick={EditMode} value="editmode1" />
-      </div>
-      <hr />
-      <h4>ADDRESS LINE</h4>
-      <div id="uaddress">
-        <div id="a-l">
-          <EditBox
-            name="country"
-            p="Country"
-            value={Info.country}
-            change={handleChange}
-            edit={editor.editmode2}
-          />
-          <EditBox
-            name="region"
-            p="Region"
-            value={Info.region}
-            change={handleChange}
-            edit={editor.editmode2}
-          />
-          <br />
-          <EditBox
-            name="phone"
-            p="Phone Number"
-            value={Info.phone}
-            change={handleChange}
-            edit={editor.editmode2}
-          />
-          <EditBox
-            name="email"
-            p="Email"
-            value={Info.email}
-            change={handleChange}
-            edit={editor.editmode2}
-          />
-        </div>
-        <EditIcon onClick={EditMode} value="editmode2" />
-      </div>
-      <hr />
-      <h4>MORE INFORMATION</h4>
-      <div id="umore-info">
-        <div id="umore-infopart">
-          <EditBox
-            name="department"
-            p="Department"
-            value={Info.department}
-            change={handleChange}
-            edit={editor.editmode3}
-          />
-          <br />
-          <EditBox
-            name="batch"
-            p="Batch"
-            value={Info.batch}
-            change={handleChange}
-            edit={editor.editmode3}
-          />
-          <br />
-          <EditBox
-            name="fav_verse"
-            p="Favorite Bible Verse"
-            value={Info.fav_verse}
-            change={handleChange}
-            edit={editor.editmode3}
-          />
-        </div>
-        <EditIcon onClick={EditMode} value="editmode3" />
-      </div>
-      <p
-        style={
-          update
-            ? { display: "block", margin: "0 20%", fontWeight: 500 }
-            : { display: "none" }
+  const CreatePassword = () => {
+    const [password, setPassword] = React.useState("");
+    const [confirmPassword, setConfirmPassword] = React.useState("");
+    const [error, setError] = React.useState("");
+    const [success, setSuccess] = React.useState(false);
+
+    // Handle password change
+    const handlePasswordChange = (e) => {
+      setPassword(e.target.value);
+    };
+
+    // Handle confirm password change
+    const handleConfirmPasswordChange = (e) => {
+      setConfirmPassword(e.target.value);
+    };
+
+    // Form submission
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+
+      // Check if the passwords match
+      if (password !== confirmPassword) {
+        setError("Passwords do not match");
+        setSuccess(false);
+        return;
+      }
+
+      // Reset error and proceed with submission
+      setError("");
+
+      setInfo((prev) => ({
+        ...prev,
+        password: password,
+      })); // Create the data object to send to backend
+
+      try {
+        const response = await fetch(
+          "http://localhost:4000/4kfellowhship/edit",
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ ...Info, password }),
+          }
+        );
+        console.log(response.json());
+
+        if (response.ok) {
+          setSuccess(true);
+          setPassword("");
+          setConfirmPassword("");
+        } else {
+          setError("Failed to create password");
+          setSuccess(false);
         }
-        id="success"
-      >
-        Update Successfully!!!
-      </p>
-      <button id="update" type="submit" value="Update">
-        Update
-      </button>
-    </form>
+      } catch (err) {
+        setError("Error occurred while creating the password");
+        setSuccess(false);
+      }
+    };
+
+    return (
+      <div className="flex items-center justify-center  bg-gray-100">
+        <div className="p-8 rounded-lg w-full max-w-md">
+          <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">
+            Create a password for security
+          </h2>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label
+                htmlFor="password"
+                className="block text-gray-600 font-medium mb-2"
+              >
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={handlePasswordChange}
+                required
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-gray-600 font-medium mb-2"
+              >
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                id="confirmPassword"
+                value={confirmPassword}
+                onChange={handleConfirmPasswordChange}
+                required
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            {error && (
+              <p className="text-red-500 text-sm text-center mb-4">{error}</p>
+            )}
+            {success && (
+              <p className="text-green-500 text-sm text-center mb-4">
+                Password created successfully!
+              </p>
+            )}
+            <div className="flex">
+              <button
+                name="submit"
+                type="submit"
+                className="w-full py-3 mx-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                Create Password
+              </button>
+              <button
+                name="skip"
+                onClick={() => navigate("/")} // Updated here for the skip button
+                className="w-[20%] py-3 mx-2  text-blue-500 font-semibold rounded-md hover:text-blue-900"
+              >
+                Skip
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  };
+  console.log(Info.password);
+  console.log(Info);
+  return (
+    <div>
+      {Info.password === null ? <CreatePassword /> : null}
+      <form id="update-form" onSubmit={handleUpdate}>
+        {Info.img ? <img src={Info.img} id="editimage" alt="Profile" /> : null}
+        <h4>PERSONAL INFORMATION</h4>
+        <div id="upersonal-information">
+          <div id="p-i">
+            <EditBox
+              p="First Name"
+              name="firstname"
+              value={Info.firstname}
+              onChange={handleChange}
+              edit={editor.editmode1}
+            />
+            <EditBox
+              name="lastname"
+              p="Last Name"
+              value={Info.lastname}
+              change={handleChange}
+              edit={editor.editmode1}
+            />
+            <br />
+            <EditBox
+              name="date_of_birth"
+              p="Date of Birth"
+              type="date"
+              value={Info.date_of_birth}
+              change={handleChange}
+              edit={editor.editmode1}
+            />
+            <EditBox
+              name="church"
+              p="Team"
+              value={Info.church}
+              change={handleChange}
+              edit={editor.editmode1}
+            />
+          </div>
+          <EditIcon onClick={EditMode} value="editmode1" />
+        </div>
+        <hr />
+        <h4>ADDRESS LINE</h4>
+        <div id="uaddress">
+          <div id="a-l">
+            <EditBox
+              name="country"
+              p="Country"
+              value={Info.country}
+              change={handleChange}
+              edit={editor.editmode2}
+            />
+            <EditBox
+              name="region"
+              p="Region"
+              value={Info.region}
+              change={handleChange}
+              edit={editor.editmode2}
+            />
+            <br />
+            <EditBox
+              name="phone"
+              p="Phone Number"
+              value={Info.phone}
+              change={handleChange}
+              edit={editor.editmode2}
+            />
+            <EditBox
+              name="email"
+              p="Email"
+              value={Info.email}
+              change={handleChange}
+              edit={editor.editmode2}
+            />
+          </div>
+          <EditIcon onClick={EditMode} value="editmode2" />
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
   );
 };
+
 export default UpdateForm;
