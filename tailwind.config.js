@@ -4,6 +4,8 @@ module.exports = {
     "./src/Main/Main.js",
     "./src/components/Card.js",
     "./src/components/Delete.js",
+    "./src/components/FilterBox.js",
+    "./src/components/InputBox.js",
   ],
   theme: {
     extend: {
@@ -37,6 +39,7 @@ module.exports = {
       },
       fontSize: {
         cardtext: "clamp(10px,1.1vw,1.2em)",
+        biblequote: "clamp(1em,1.2vw,2em)",
       },
     },
   },

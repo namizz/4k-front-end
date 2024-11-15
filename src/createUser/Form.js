@@ -130,16 +130,16 @@ const Form = () => {
         />
         <br />
         <InputBox
+          name="church"
+          p="Team"
+          value={Info.church}
+          change={handleChange}
+        />
+        <InputBox
           name="date_of_birth"
           p="Date of Birth"
           type="date"
           value={Info.date_of_birth}
-          change={handleChange}
-        />
-        <InputBox
-          name="church"
-          p="Team"
-          value={Info.church}
           change={handleChange}
         />
       </div>

@@ -1,5 +1,6 @@
 import React from "react";
 import Card from "../components/Card";
+import FilterBox from "../components/FilterBox";
 
 const Header = () => {
   return (
@@ -27,7 +28,7 @@ const Welcome = () => {
 };
 const BibleQuote = ({ book, chapter, num, verse }) => {
   return (
-    <div className="p-3 px-20 font-semibold flex flex-col text-base mx-15">
+    <div className="p-3 px-20 font-semibold flex flex-col text-biblequote mx-15">
       <p className="font-jolly-lodger text-blue-950 flex justify-start text-[1.3vw] px-[12%]">
         ------------------Bible Verse---------------
       </p>
@@ -39,7 +40,38 @@ const BibleQuote = ({ book, chapter, num, verse }) => {
   );
 };
 
-const CardBox = () => {
+const FilterBoxes = ({ clickFilter }) => {
+  return (
+    <div className="flex">
+      <FilterBox dept={"CS"} onClick={clickFilter} />
+      <FilterBox dept={"Prayer"} />
+    </div>
+  );
+};
+
+const FilterDiv = ({ clickFilter }) => {
+  return (
+    <div className="mx-32">
+      <div className="bg-gradient-to-r from-[#365583] to-[#163252] rounded-tl-3xl">
+        <p className="text-white text-[2vw] px-24">List of Members</p>
+      </div>
+      <div className="flex justify-between ml-12">
+        <div className="">
+          <p className="text-yellow-600 font-semibold text-[1.2vw]">Filter</p>
+          <FilterBoxes clickFilter={clickFilter} />
+        </div>
+        <img
+          src="https://png.pngtree.com/png-vector/20230915/ourmid/pngtree-minimalist-yellow-lines-border-png-image_10086268.png "
+          alt="yellow line"
+          className="bg-transparent w-[6%] object-cover "
+        />
+      </div>
+      <hr className="border-blue-400 border-opacity-65 w-full mt-1" />
+    </div>
+  );
+};
+
+const CardBox = ({ marked }) => {
   const [Info, setInfo] = React.useState([]);
   React.useEffect(() => {
     fetch("http://localhost:4000/4kfellowhship")
@@ -61,19 +93,37 @@ const CardBox = () => {
         Info.filter((data) => data !== undefined).map((data) => {
           console.log(data);
           return data.phone ? (
-            <Card
-              key={data.id}
-              batch={data.batch}
-              firstname={data.firstname}
-              lastname={data.lastname}
-              phone={data.phone}
-              team={data.church}
-              img={data.img}
-              dept={data.department}
-              email={data.email}
-              faverse={data.fav_verse}
-              country={data.country.slice(0, 3).toUpperCase()}
-            />
+            marked ? (
+              data.department == "Computer Science" ? (
+                <Card
+                  key={data.id}
+                  batch={data.batch}
+                  firstname={data.firstname}
+                  lastname={data.lastname}
+                  phone={data.phone}
+                  team={data.church}
+                  img={data.img}
+                  dept={data.department}
+                  email={data.email}
+                  faverse={data.fav_verse}
+                  country={data.country.slice(0, 3).toUpperCase()}
+                />
+              ) : null
+            ) : (
+              <Card
+                key={data.id}
+                batch={data.batch}
+                firstname={data.firstname}
+                lastname={data.lastname}
+                phone={data.phone}
+                team={data.church}
+                img={data.img}
+                dept={data.department}
+                email={data.email}
+                faverse={data.fav_verse}
+                country={data.country.slice(0, 3).toUpperCase()}
+              />
+            )
           ) : null;
         })
       ) : (
@@ -86,6 +136,10 @@ const CardBox = () => {
 const Main = () => {
   const [Verse, setVerse] = React.useState("");
   const [bookName, setBookName] = React.useState("");
+  const [marked, setMarked] = React.useState(false);
+  const clickFilter = () => {
+    setMarked(true);
+  };
 
   // First useEffect to fetch the Bible verse
   React.useEffect(() => {
@@ -150,7 +204,8 @@ const Main = () => {
         chapter={Verse.chapter}
         num={Verse.verse}
       />
-      <CardBox />
+      <FilterDiv clickFilter={clickFilter} />
+      <CardBox marked={marked} />
     </div>
   );
 };

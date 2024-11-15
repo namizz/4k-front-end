@@ -32,7 +32,7 @@ const Card = (props) => {
             "https://pics.craiyon.com/2023-11-26/oMNPpACzTtO5OVERUZwh3Q.webp"
           }
           alt="pic"
-          className="rounded-full border-[3px] border-white w-full h-full object-fill"
+          className="rounded-full border-[3px] border-white w-full h-full object-cover"
         />
       </div>
       <div className="w-full h-1/6 flex justify-between border-t-2 border-blue-950 px-2">
