@@ -90,7 +90,7 @@ const Form = () => {
         if (response.ok) {
           setSubmit("The Information has been Submitted!");
           setExisting("");
-          navigate("/");
+          navigate(`/update?phone=${Info.phone}`);
 
           console.log("Data submitted successfully");
         } else {
@@ -134,6 +134,16 @@ const Form = () => {
           p="Team"
           value={Info.church}
           change={handleChange}
+          type="combo"
+          options={[
+            "Member",
+            "Prayer",
+            "Bible Study",
+            "Leader",
+            "Evangelical",
+            "Worship",
+            "Literature",
+          ]}
         />
         <InputBox
           name="date_of_birth"

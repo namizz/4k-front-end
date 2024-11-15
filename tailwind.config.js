@@ -6,6 +6,7 @@ module.exports = {
     "./src/components/Delete.js",
     "./src/components/FilterBox.js",
     "./src/components/InputBox.js",
+    "./src/Login/LogInPage.jsx",
   ],
   theme: {
     extend: {

@@ -1,8 +1,9 @@
 import EditBox from "../components/EditBox";
 import React from "react";
 import EditIcon from "../components/EditIcon";
+import { useLocation } from "react-router-dom";
 
-const UpdateForm = () => {
+const UpdateForm = (props) => {
   const [Info, setInfo] = React.useState({
     firstname: "",
     lastname: "",
@@ -17,10 +18,16 @@ const UpdateForm = () => {
     img: "",
     fav_verse: "",
   });
+
   const [update, setUpdate] = React.useState(false);
 
+  // Extract phone from the URL query parameter using useLocation
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const phone = searchParams.get("phone");
+  console.log("phone", phone);
   React.useEffect(() => {
-    const api = fetch("http://localhost:4000/4kfellowhship/1")
+    fetch(`http://localhost:4000/4kfellowhship?phone=${phone || "0991065050"}`)
       .then((response) => response.json())
       .then((data) => {
         setInfo(data[0]);
@@ -51,7 +58,7 @@ const UpdateForm = () => {
   };
   const handleUpdate = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:4000/4kfellowhship/edit", {
+    const response = await fetch(`http://localhost:4000/4kfellowhship/edit`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -66,6 +73,7 @@ const UpdateForm = () => {
     console.log(result); // Log the response if needed
     setUpdate(true);
   };
+  console.log(Info);
 
   return (
     <form id="update-form" onSubmit={handleUpdate}>
