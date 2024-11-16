@@ -1,5 +1,9 @@
-import React, { useState } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../UserContent/UserContent";
+import { jwtDecode } from "jwt-decode";
+
+import { AuthContext } from "../Authentication.js/AuthContext";
 
 // Input component for reusable input field
 const Input = (props) => {
@@ -17,7 +21,47 @@ const Input = (props) => {
 
 // LoginForm Component
 const LoginForm = () => {
+  const { token, setToken } = React.useContext(AuthContext);
   const navigate = useNavigate();
+  const { setUser } = useUser();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (token && typeof token === "string") {
+        // Check if token is valid and a string
+        try {
+          // Decode the token to check if it's valid
+          const decoded = jwtDecode(token);
+          const isExpired = decoded.exp < Date.now() / 1000;
+          const response = await fetch(
+            `http://localhost:4000/4kfellowhship?phone=${decoded.phone}&password=${decoded.password}`
+          );
+          const data = await response.json();
+          console.log(data[0].password);
+
+          // Check if user is found and password matches
+          if (data && data.length > 0) {
+            setUser(data[0]);
+          }
+
+          if (!isExpired) {
+            navigate("/"); // Redirect if the token is valid and not expired
+          } else {
+            localStorage.removeItem("jwtToken");
+            setToken(null); // Remove expired token from AuthContext and localStorage
+          }
+        } catch (err) {
+          console.error("Invalid token", err);
+          localStorage.removeItem("jwtToken");
+          setToken(null); // Clear invalid token
+        }
+      } else {
+        console.error("Token is null or invalid:", token);
+      }
+    };
+
+    fetchData();
+  }, [token, setToken, navigate, setUser]);
 
   // State to store phone number and password
   const [phone, setPhone] = useState("");
@@ -40,24 +84,59 @@ const LoginForm = () => {
   };
 
   // Handle form submission
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   // Fetch data from the server to validate the credentials
+  //   console.log("phone", phone, "password", password);
+  //   try {
+  //     const response = await fetch(
+  //       `http://localhost:4000/4kfellowhship?phone=${phone}&password=${password}`
+  //     );
+  //     const data = await response.json();
+  //     console.log(data[0].password);
+
+  //     // Check if user is found and password matches
+  //     if (
+  //       data && data.length > 0 && data[0].password
+  //         ? data[0].password === password
+  //         : true
+  //     ) {
+  //       setUser(data[0]);
+  //       // Credentials are valid, navigate to the main page
+  //       navigate("/"); // Replace "/mainPage" with your actual main page route
+  //     } else {
+  //       // Credentials are incorrect, show an error
+  //       setError("Invalid phone number or password. Please try again.");
+  //     }
+  //   } catch (err) {
+  //     setError("Error occurred while logging in. Please try again.");
+  //   }
+  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(password, phone);
 
-    // Fetch data from the server to validate the credentials
-    console.log("phone", phone, "password", password);
     try {
       const response = await fetch(
-        `http://localhost:4000/4kfellowhship?phone=${phone}&password=${password}`
+        "http://localhost:4000/4kfellowhship/login",
+        {
+          method: "POST", // Using POST for login
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ phone, password }), // Sending phone and password in the request body
+        }
       );
       const data = await response.json();
+      console.log("data", data);
 
-      // Check if user is found and password matches
-      if (data && data.length > 0 && data[0].password === password) {
-        // Credentials are valid, navigate to the main page
-        navigate("/"); // Replace "/mainPage" with your actual main page route
+      if (response.ok && data.token) {
+        setToken(data.token); // Save the token in AuthContext
+        localStorage.setItem("jwtToken", data.token); // Store token in localStorage
+        navigate("/"); // Redirect to the main page
       } else {
-        // Credentials are incorrect, show an error
-        setError("Invalid phone number or password. Please try again.");
+        setError(data.message || "Invalid phone number or password.");
       }
     } catch (err) {
       setError("Error occurred while logging in. Please try again.");

@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import Card from "../components/Card";
 import FilterBox from "../components/FilterBox";
+import { useUser } from "../UserContent/UserContent";
+import { AuthContext } from "../Authentication.js/AuthContext";
 
 const Header = () => {
   return (
@@ -91,7 +93,7 @@ const CardBox = ({ marked }) => {
     <div className="m-7 mx-28 xl:mx-44 flex flex-wrap justify-evenly p-0">
       {Info.length > 0 ? (
         Info.filter((data) => data !== undefined).map((data) => {
-          console.log(data);
+          //console.log(data);
           return data.phone ? (
             marked ? (
               data.department == "Computer Science" ? (
@@ -134,6 +136,9 @@ const CardBox = ({ marked }) => {
 };
 
 const Main = () => {
+  const { user } = useUser();
+  console.log("user", user);
+  const { logout } = useContext(AuthContext);
   const [Verse, setVerse] = React.useState("");
   const [bookName, setBookName] = React.useState("");
   const [marked, setMarked] = React.useState(false);
@@ -196,8 +201,27 @@ const Main = () => {
   return (
     <div className="bg-white">
       <Header />
+      {
+        //check
+      }
+      {user ? (
+        <img
+          src={user.img}
+          alt="user image"
+          className="w-20 rounded-full h-25 object-cover absolute top-0 right-20"
+        />
+      ) : null}
       <div className="h-1 w-10/12 border-orange-200 border-y-4 mx-auto"></div>
       <Welcome />
+      {user ? (
+        <button
+          onClick={logout} // Trigger logout function when clicked
+          className="bg-red-500 text-white p-2 rounded-full absolute top-0 right-10"
+        >
+          Log Out
+        </button>
+      ) : null}
+
       <BibleQuote
         book={bookName}
         verse={Verse.text}

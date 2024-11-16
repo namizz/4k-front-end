@@ -7,6 +7,8 @@ import UpdateForm from "./updateUser/Form";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Main from "./Main/Main";
 import LoginPage from "./Login/LogInPage";
+import { UserProvider } from "./UserContent/UserContent"; // Import UserProvider
+import { AuthProvider } from "./Authentication.js/AuthContext";
 
 const CreateUserPage = () => {
   return (
@@ -24,14 +26,21 @@ const EditUserPage = () => {
     </div>
   );
 };
+
 ReactDOM.render(
-  <Router>
-    <Routes>
-      <Route path="/createuser" element={<CreateUserPage />} />
-      <Route path="/update" element={<EditUserPage />} />
-      <Route path="/" element={<Main />} />
-      <Route path="/login" element={<LoginPage />} />
-    </Routes>
-  </Router>,
+  <AuthProvider>
+    <UserProvider>
+      {" "}
+      {/* Wrap the entire app in UserProvider */}
+      <Router>
+        <Routes>
+          <Route path="/createuser" element={<CreateUserPage />} />
+          <Route path="/update" element={<EditUserPage />} />
+          <Route path="/" element={<Main />} /> {/* Main page */}
+          <Route path="/login" element={<LoginPage />} /> {/* Login page */}
+        </Routes>
+      </Router>
+    </UserProvider>
+  </AuthProvider>,
   document.getElementById("root")
 );
