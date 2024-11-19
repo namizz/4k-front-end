@@ -3,7 +3,7 @@
   margin-left: 2em;
   height: 200px;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 100%;
 }
 .image-uploader {
   height: clamp(80px, 15vw, 200px);

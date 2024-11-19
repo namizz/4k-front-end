@@ -110,121 +110,130 @@ const Form = () => {
   // frame to create all the data
   // after all the element are create there will be a submit button
   // take the value of each inputs box and store it on array or different variable, on click of sumbit----> useState or useEffect
-  //
+  // //
+  // margin: 0vw 4vw;
+  // padding: 1vw 0;background-color: rgb(114, 114, 114);
   return (
     <form id="form" onSubmit={handleSubmit}>
-      <div id="personal-information">
-        <h4 id="h4">PERSONAL INFORMATION</h4>
-        <InputBox
-          name="firstname"
-          p="First Name"
-          value={Info.firstname}
-          change={handleChange}
-          display={required.fi}
-        />
-        <InputBox
-          name="lastname"
-          p="Last Name"
-          value={Info.lastname}
-          change={handleChange}
-          display={required.la}
-        />
-        <br />
-        <InputBox
-          name="church"
-          p="Team"
-          value={Info.church}
-          change={handleChange}
-          type="combo"
-          options={[
-            "Member",
-            "Prayer",
-            "Bible Study",
-            "Leader",
-            "Evangelical",
-            "Worship",
-            "Literature",
-          ]}
-        />
-        <InputBox
-          name="date_of_birth"
-          p="Date of Birth"
-          type="date"
-          value={Info.date_of_birth}
-          change={handleChange}
-        />
+      <div className="bg-[#f5f5fc9d]">
+        <div id="personal-information" className="mx-[4vw] py-[1vw]">
+          <h4 id="h4">PERSONAL INFORMATION</h4>
+          <InputBox
+            name="firstname"
+            p="First Name"
+            value={Info.firstname}
+            change={handleChange}
+            display={required.fi}
+          />
+          <InputBox
+            name="lastname"
+            p="Last Name"
+            value={Info.lastname}
+            change={handleChange}
+            display={required.la}
+          />
+          <br />
+          <InputBox
+            name="church"
+            p="Team"
+            value={Info.church}
+            change={handleChange}
+            type="combo"
+            options={[
+              "Member",
+              "Prayer",
+              "Bible Study",
+              "Leader",
+              "Evangelical",
+              "Worship",
+              "Literature",
+            ]}
+          />
+          <InputBox
+            name="date_of_birth"
+            p="Date of Birth"
+            type="date"
+            value={Info.date_of_birth}
+            change={handleChange}
+          />
+        </div>
+        <hr />
+        <div className="mx-[4vw] py-[1vw]">
+          <h4 id="h4">ADDRESS LINE</h4>
+          <InputBox
+            name="country"
+            p="Country"
+            value={Info.country}
+            change={handleChange}
+          />
+          <InputBox
+            name="region"
+            p="Region"
+            value={Info.region}
+            change={handleChange}
+          />
+          <br />
+          <InputBox
+            name="phone"
+            p="Phone Number"
+            value={Info.phone}
+            change={handleChange}
+            display={required.ph}
+            msg={isExisting}
+          />
+          <InputBox
+            name="email"
+            p="Email"
+            value={Info.email}
+            change={handleChange}
+          />
+        </div>
+        <hr />
+        <div className="mx-[4vw] py-[1vw]">
+          <h4 id="h4">MORE INFORMATION</h4>
+          <InputBox
+            name="department"
+            p="Department"
+            value={Info.department}
+            change={handleChange}
+            display={required.de}
+          />
+          <br />
+          <InputBox
+            name="batch"
+            p="Batch"
+            value={Info.batch}
+            change={handleChange}
+            display={required.ba}
+          />
+          <br />
+          <Image setImgUrlInInfo={setImgUrlInInfo} />
+          <InputBox
+            name="fav_verse"
+            p="Favorite Bible Verse"
+            value={Info.fav_verse}
+            change={handleChange}
+          />
+          <p
+            style={
+              submitMessage
+                ? { display: "block", margin: "0 20%", fontWeight: 500 }
+                : { display: "none" }
+            }
+            id="success"
+          >
+            {submitMessage}
+          </p>
+        </div>
+        <div className="w-full flex justify-center">
+          <button
+            className="text-white text-[1em] bg-[#2c2c5a] py-[0.7em] px-[2em] rounded-xl hover:bg-[#393974]"
+            type="submit"
+          >
+            Submit
+          </button>
+        </div>
       </div>
-      <hr />
-      <div id="address">
-        <h4 id="h4">ADDRESS LINE</h4>
-        <InputBox
-          name="country"
-          p="Country"
-          value={Info.country}
-          change={handleChange}
-        />
-        <InputBox
-          name="region"
-          p="Region"
-          value={Info.region}
-          change={handleChange}
-        />
-        <br />
-        <InputBox
-          name="phone"
-          p="Phone Number"
-          value={Info.phone}
-          change={handleChange}
-          display={required.ph}
-          msg={isExisting}
-        />
-        <InputBox
-          name="email"
-          p="Email"
-          value={Info.email}
-          change={handleChange}
-        />
-      </div>
-      <hr />
-      <div id="more-info">
-        <h4 id="h4">MORE INFORMATION</h4>
-        <InputBox
-          name="department"
-          p="Department"
-          value={Info.department}
-          change={handleChange}
-          display={required.de}
-        />
-        <br />
-        <InputBox
-          name="batch"
-          p="Batch"
-          value={Info.batch}
-          change={handleChange}
-          display={required.ba}
-        />
-        <br />
-        <Image setImgUrlInInfo={setImgUrlInInfo} />
-        <InputBox
-          name="fav_verse"
-          p="Favorite Bible Verse"
-          value={Info.fav_verse}
-          change={handleChange}
-        />
-        <p
-          style={
-            submitMessage
-              ? { display: "block", margin: "0 20%", fontWeight: 500 }
-              : { display: "none" }
-          }
-          id="success"
-        >
-          {submitMessage}
-        </p>
-      </div>
-      <button id="submit" type="submit">
-        Submit
-      </button>
     </form>
   );
 };

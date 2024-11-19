@@ -8,6 +8,12 @@ module.exports = {
     "./src/components/InputBox.js",
     "./src/Login/LogInPage.jsx",
     "./src/updateUser/Form.js",
+    "./src/components/ConfirmationModal.js",
+    "./src/components/Edit.js",
+    "./src/components/Logout.js",
+    "./src/components/Header.js",
+    "./src/createUser/Form.js",
+    "./src/updateUser/Form.js",
   ],
   theme: {
     extend: {
@@ -38,10 +44,13 @@ module.exports = {
       },
       width: {
         card: "30%",
+        form: "clamp(10px, 70vw, 550px)",
       },
       fontSize: {
         cardtext: "clamp(10px,1.1vw,1.2em)",
         biblequote: "clamp(1em,1.2vw,2em)",
+        filter: "clamp(1em,1.75vw,1.3em)",
+        heade: "clamp(12px, 3vw, 2.8em)",
       },
     },
   },

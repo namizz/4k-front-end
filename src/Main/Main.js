@@ -1,8 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
 import Card from "../components/Card";
 import FilterBox from "../components/FilterBox";
 import { useUser } from "../UserContent/UserContent";
 import { AuthContext } from "../Authentication.js/AuthContext";
+import EditButton from "../components/Edit";
+import LogoutImg from "../components/Logout";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -45,8 +49,25 @@ const BibleQuote = ({ book, chapter, num, verse }) => {
 const FilterBoxes = ({ clickFilter }) => {
   return (
     <div className="flex">
-      <FilterBox dept={"CS"} onClick={clickFilter} />
-      <FilterBox dept={"Prayer"} />
+      <FilterBox
+        dept={"Leaders"}
+        onClick={() => clickFilter("church", "Leader")}
+      />
+      <FilterBox
+        dept={"CS"}
+        onClick={() => clickFilter("department", "Computer Science")}
+      />
+      <FilterBox
+        dept={"Statistics"}
+        onClick={() => clickFilter("department", "Statistics")}
+      />
+
+      <FilterBox
+        dept={"Prayer"}
+        onClick={() => clickFilter("church", "Prayer team")}
+      />
+      <FilterBox dept={"2026"} onClick={() => clickFilter("batch", "2026")} />
+      <FilterBox dept={"2027"} onClick={() => clickFilter("batch", "2027")} />
     </div>
   );
 };
@@ -59,22 +80,23 @@ const FilterDiv = ({ clickFilter }) => {
       </div>
       <div className="flex justify-between ml-12">
         <div className="">
-          <p className="text-yellow-600 font-semibold text-[1.2vw]">Filter</p>
+          <p className="text-yellow-600 font-semibold text-cardtext">Filter</p>
           <FilterBoxes clickFilter={clickFilter} />
         </div>
         <img
           src="https://png.pngtree.com/png-vector/20230915/ourmid/pngtree-minimalist-yellow-lines-border-png-image_10086268.png "
           alt="yellow line"
-          className="bg-transparent w-[6%] object-cover "
+          className="bg-transparent w-[3vw] border relative right-0 object-cover "
         />
       </div>
       <hr className="border-blue-400 border-opacity-65 w-full mt-1" />
     </div>
   );
 };
-
-const CardBox = ({ marked }) => {
+// CardBox component inside Main.js or as a separate component
+const CardBox = ({ marked, user }) => {
   const [Info, setInfo] = React.useState([]);
+
   React.useEffect(() => {
     fetch("http://localhost:4000/4kfellowhship")
       .then((response) => {
@@ -89,45 +111,44 @@ const CardBox = ({ marked }) => {
       .catch((err) => console.log("Error", err));
   }, []);
 
+  const filteredInfo = Info.filter((data) => {
+    if (!data || !data.phone) return false;
+
+    // Apply department filter
+    const matchesDepartment = marked.department
+      ? data.department === marked.department
+      : true;
+
+    // Apply church filter
+    const matchesChurch = marked.church ? data.church === marked.church : true;
+
+    // Apply batch filter
+    const matchesBatch = marked.batch ? data.batch === marked.batch : true;
+
+    return matchesDepartment && matchesChurch && matchesBatch;
+  });
+
   return (
     <div className="m-7 mx-28 xl:mx-44 flex flex-wrap justify-evenly p-0">
-      {Info.length > 0 ? (
-        Info.filter((data) => data !== undefined).map((data) => {
-          //console.log(data);
-          return data.phone ? (
-            marked ? (
-              data.department == "Computer Science" ? (
-                <Card
-                  key={data.id}
-                  batch={data.batch}
-                  firstname={data.firstname}
-                  lastname={data.lastname}
-                  phone={data.phone}
-                  team={data.church}
-                  img={data.img}
-                  dept={data.department}
-                  email={data.email}
-                  faverse={data.fav_verse}
-                  country={data.country.slice(0, 3).toUpperCase()}
-                />
-              ) : null
-            ) : (
-              <Card
-                key={data.id}
-                batch={data.batch}
-                firstname={data.firstname}
-                lastname={data.lastname}
-                phone={data.phone}
-                team={data.church}
-                img={data.img}
-                dept={data.department}
-                email={data.email}
-                faverse={data.fav_verse}
-                country={data.country.slice(0, 3).toUpperCase()}
-              />
-            )
-          ) : null;
-        })
+      {filteredInfo.length > 0 ? (
+        filteredInfo.map((data) => (
+          <Card
+            key={data.id}
+            batch={data.batch}
+            firstname={data.firstname}
+            lastname={data.lastname}
+            phone={data.phone}
+            team={data.church}
+            img={data.img}
+            dept={data.department}
+            email={data.email}
+            faverse={data.fav_verse}
+            country={data.country.slice(0, 3).toUpperCase()}
+            user={user}
+          />
+        ))
+      ) : Info.length > 0 ? (
+        <p>No data exist with filter</p>
       ) : (
         <p>Loading...</p>
       )}
@@ -136,14 +157,68 @@ const CardBox = ({ marked }) => {
 };
 
 const Main = () => {
-  const { user } = useUser();
+  const { user, setUser } = useUser();
   console.log("user", user);
   const { logout } = useContext(AuthContext);
   const [Verse, setVerse] = React.useState("");
   const [bookName, setBookName] = React.useState("");
-  const [marked, setMarked] = React.useState(false);
-  const clickFilter = () => {
-    setMarked(true);
+  const [marked, setMarked] = React.useState({
+    department: "",
+    church: "",
+    batch: "",
+  });
+  const [token, setToken] = React.useState(localStorage.getItem("jwtToken")); // Retrieve token from localStorage
+  useEffect(() => {
+    console.log("check", token);
+
+    if (!user && token && typeof token === "string") {
+      console.log("no token");
+
+      try {
+        // Decode the token to check if it's valid
+        const decoded = jwtDecode(token);
+        console.log("decode", decoded);
+        const isExpired = decoded.exp < Date.now() / 1000;
+
+        if (isExpired) {
+          localStorage.removeItem("jwtToken");
+          setToken(null); // Remove expired token
+        } else {
+          // Construct the fetch URL depending on whether `password` is included
+          const queryParams = `phone=${decoded.phone}`;
+          const fetchUrl = decoded.password
+            ? `http://localhost:4000/4kfellowhship?${queryParams}&password=${decoded.password}`
+            : `http://localhost:4000/4kfellowhship?${queryParams}`;
+
+          // Fetch user data based on the decoded information (e.g., phone and password)
+          fetch(fetchUrl)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data && data.length > 0) {
+                setUser(data[0]); // Set user data in state if valid
+              }
+            })
+            .catch((err) => console.error("Error fetching user:", err));
+        }
+      } catch (err) {
+        console.error("Invalid token", err);
+        localStorage.removeItem("jwtToken");
+        setToken(null); // Clear invalid token
+      }
+    } else {
+      console.error("Token is null or invalid:", token);
+    }
+  }, [token, user, setToken, setUser]);
+
+  const clickFilter = (type, value) => {
+    setMarked((prev) => {
+      // If the filter is already applied, remove it by setting it to an empty string
+      if (prev[type] === value) {
+        return { ...prev, [type]: "" }; // Remove the filter
+      } else {
+        return { ...prev, [type]: value }; // Apply the filter
+      }
+    });
   };
 
   // First useEffect to fetch the Bible verse
@@ -197,30 +272,49 @@ const Main = () => {
 
     fetchBookName();
   }, [Verse.book]);
+  const navigate = useNavigate();
+
+  const logger = () => {
+    navigate("/login");
+  };
 
   return (
     <div className="bg-white">
       <Header />
-      {
-        //check
-      }
       {user ? (
-        <img
-          src={user.img}
-          alt="user image"
-          className="w-20 rounded-full h-25 object-cover absolute top-0 right-20"
-        />
-      ) : null}
+        <div className="">
+          <img
+            src={
+              user.img ||
+              "https://static.vecteezy.com/system/resources/previews/003/715/527/non_2x/picture-profile-icon-male-icon-human-or-people-sign-and-symbol-vector.jpg"
+            }
+            alt="user image"
+            className="w-20 rounded-full h-20 object-cover absolute top-[0.5em] right-[6em] border-4 border-blue-950 border-opacity-10"
+          />
+          <button
+            onClick={logout} // Trigger logout function when clicked
+            className="absolute top-0 right-10"
+          >
+            <LogoutImg />
+            {/* <LogoutImg /> */}
+          </button>
+
+          <EditButton phone={user.phone} />
+          <div className="absolute top-14 right-[11em] opacity-40 text-or hover:opacity-80 ">
+            {user.firstname}
+          </div>
+        </div>
+      ) : (
+        <div
+          className="absolute top-6 right-28 px-4 py-2 bg-[#ffa127e3] text-white rounded-3xl shadow-lg cursor-pointer hover:bg-green-700 transition-all duration-200"
+          onClick={logger}
+        >
+          Log In +
+        </div>
+      )}
+
       <div className="h-1 w-10/12 border-orange-200 border-y-4 mx-auto"></div>
       <Welcome />
-      {user ? (
-        <button
-          onClick={logout} // Trigger logout function when clicked
-          className="bg-red-500 text-white p-2 rounded-full absolute top-0 right-10"
-        >
-          Log Out
-        </button>
-      ) : null}
 
       <BibleQuote
         book={bookName}
@@ -229,7 +323,7 @@ const Main = () => {
         num={Verse.verse}
       />
       <FilterDiv clickFilter={clickFilter} />
-      <CardBox marked={marked} />
+      <CardBox marked={marked} user={user ? user.church : null} />
     </div>
   );
 };

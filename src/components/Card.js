@@ -1,11 +1,24 @@
+import React, { useState } from "react";
 import EditIcon from "./EditIcon";
 import Deletor from "./Delete";
-import React from "react";
-const Card = (props) => {
-  const [isDeleted, setIsDeleted] = React.useState(false);
+import ConfirmationModal from "./ConfirmationModal";
 
-  const handleDeleteSuccess = () => {
+const Card = (props) => {
+  const [isDeleted, setIsDeleted] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  const handleDeleteClick = () => {
+    setShowModal(true);
+  };
+
+  const handleConfirmDelete = () => {
     setIsDeleted(true);
+    setShowModal(false);
+    // Here, you can also perform any additional delete actions, like calling an API
+  };
+
+  const handleCancelDelete = () => {
+    setShowModal(false);
   };
 
   if (isDeleted) {
@@ -14,18 +27,20 @@ const Card = (props) => {
 
   return (
     <div className="border border-t-0 border-card-blue w-card h-[17vw] m-3 rounded-card-radius relative">
-      <div className="bg-gradient-to-b from-[#8899AF] to-card-blue  h-1/3 w-[101%] rounded-t-card-radius flex -mx-[0.5%] ">
+      <div className="bg-gradient-to-b from-[#8899AF] to-card-blue h-1/3 w-[101%] rounded-t-card-radius flex -mx-[0.5%]">
         <div className="my-[4%] px-[10%] justify-start text-[0.9vw] text-gray-50">
-          {props.church || "prayer"}
+          {props.team || "member"}
         </div>
-        <div className=" group m-2 text-sm text-right absolute top-[2%] right-[4%] ">
-          <Deletor phone={props.phone} onDeleteSuccess={handleDeleteSuccess} />
-        </div>
+        {props.user === "Leader" && props.team !== "Leader" ? (
+          <div className="group m-2 text-sm text-right absolute top-[2%] right-[4%]">
+            <Deletor phone={props.phone} onDeleteSuccess={handleDeleteClick} />
+          </div>
+        ) : null}
       </div>
-      <hr className="z-10 bg-white h-1 absolute w-full -left-[1px]  border-b-[1.8px] border-card-blue" />
+      <hr className="z-10 bg-white h-1 absolute w-full -left-[1px] border-b-[1.8px] border-card-blue" />
       <hr className="z-10 bg-white h-1 absolute w-full left-[0.5px] border-b-[1.8px] border-card-blue" />
 
-      <div className="z-20 h-round w-2/6  rounded-full absolute left-1/3 bottom-[40%]">
+      <div className="z-20 h-round w-2/6 rounded-full absolute left-1/3 bottom-[40%]">
         <img
           src={
             props.img ||
@@ -37,26 +52,25 @@ const Card = (props) => {
       </div>
       <div className="w-full h-1/6 flex justify-between border-t-2 border-blue-950 px-2">
         <div className="text-gray-300 text-[0.9vw]">
-          {props.country ? props.country : "ET"}
+          {props.country || "ET"}
         </div>
-        <div className="">
-          <EditIcon width="10vw" />
-        </div>
+        {props.user === "Leader" ? (
+          <div>
+            <EditIcon width="10vw" phone={props.phone} />
+          </div>
+        ) : null}
       </div>
-      <div className=" w-full  flex ">
-        <div className=" w-3/5 m-4 mt-[1.5vw] mb-0 flex-col">
-          {" "}
+      <div className="w-full flex">
+        <div className="w-3/5 m-4 mt-[1.5vw] mb-0 flex-col">
           <p className="text-cardtext text-textc font-semibold w-full whitespace-nowrap overflow-hidden text-ellipsis">
             Name: {props.firstname} {props.lastname}
           </p>
           <p className="text-cardtext text-textc font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
-            {" "}
             Dept: {props.dept}
           </p>
         </div>
-        <div className="w-2/5 pt-4 ">
+        <div className="w-2/5 pt-4">
           <p className="text-cardtext text-textc font-semibold">
-            {" "}
             Batch: <span className="text-or">{props.batch}</span>
           </p>
           <div className="w-[110%] right-[8%] bg-[#FFB236] h-2/5 relative">
@@ -71,13 +85,13 @@ const Card = (props) => {
       <div className="mx-4">
         {props.email ? (
           <p className="text-cardtext text-textc font-semibold w-full whitespace-nowrap overflow-hidden text-ellipsis">
-            email: <span className=" text-or">{props.email}</span>
+            email: <span className="text-or">{props.email}</span>
           </p>
         ) : null}
       </div>
-      <div className=" flex  flex-col items-center">
+      <div className="flex flex-col items-center">
         {props.phone ? (
-          <div className=" text-[1.1vw] text-textc  font-semibold">
+          <div className="text-[1.1vw] text-textc font-semibold">
             Phone: <span className="text-or">{props.phone}</span>
           </div>
         ) : null}
@@ -85,6 +99,15 @@ const Card = (props) => {
           <p className="group-hover:text-blue-700">more...</p>
         </div>
       </div>
+
+      {/* Show ConfirmationModal if delete button is clicked */}
+      {showModal && (
+        <ConfirmationModal
+          message="Are you sure you want to delete this user?"
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+        />
+      )}
     </div>
   );
 };

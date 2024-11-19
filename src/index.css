@@ -12,20 +12,10 @@ code {
     monospace;
 }
 
-#header {
-  font-size: clamp(12px, 2vw, 1em);
-  text-align: center;
-  padding: 0.1vw 0;
-  color: white;
-  background-color: rgb(80, 80, 80);
-}
-#create-page {
-  background-color: rgb(114, 114, 114);
-}
 #form,
 #update-form {
   margin: 0.5em auto;
-  background-color: rgb(247, 247, 247);
+  background-color: rgba(255, 229, 142, 0.178);
   width: clamp(10px, 70vw, 900px);
   border-radius: 10px;
 }
@@ -42,36 +32,7 @@ code {
 hr {
   width: 80%;
 }
-#personal-information,
-#address,
-#more-info {
-  margin: 0vw 4vw;
-  padding: 1vw 0;
-}
-#upersonal-information,
-#uaddress,
-#umore-info {
-  margin: 0vw 0vw;
-  padding: 0vw 0;
-  display: flex;
-  align-items: flex-start;
-}
-#umore-infopart {
-  margin-left: 1em;
-  display: flex;
-  flex-wrap: wrap;
-}
-#submit,
-#update {
-  background-color: rgb(32, 32, 32);
-  color: rgb(219, 219, 219);
-  font-size: 1em;
-  padding: 0.7em 2em;
-  border-radius: 10px;
-}
-#submit {
-  margin: 0 35%;
-}
+
 #image-uploader {
   margin: 0 3vw;
 }

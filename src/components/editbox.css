@@ -20,6 +20,7 @@
   margin-left: 1em;
 }
 #date_of_birthText {
-  height: 1.5em;
-  width: 11em;
+  height: 2.5em;
+  padding: 0 6px;
+  width: 8em;
 }

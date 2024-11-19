@@ -1,9 +1,11 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("jwtToken"));
+  const navigate = useNavigate(); // Initialize navigate
 
   useEffect(() => {
     if (token) {
@@ -17,7 +19,7 @@ export const AuthProvider = ({ children }) => {
     console.log("logout");
     setToken(null); // Clear the token
     localStorage.removeItem("jwtToken"); // Clear from localStorage
-    // navigate("/login");
+    navigate("/login"); // Redirect to login
   };
 
   return (

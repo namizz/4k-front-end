@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../UserContent/UserContent";
 import { jwtDecode } from "jwt-decode";
@@ -10,7 +10,7 @@ const Input = (props) => {
   return (
     <input
       placeholder={`${props.msg || "(e.g 0991065050)"} `}
-      className="bg-transparent border-b-2 border-[#ebf1f0] placeholder-slate-600 text-card-blue font-semibold text-[1em] placeholder-opacity-60 rounded-lg py-2 px-6 w-80 mb-4 focus:outline-none focus:border-[#1c5d66] focus:bg-[#90b2c544] focus:text-lg transition-all hover:bg-[#ffffff44]"
+      className="bg-transparent border-b-2 border-[#ebf1f0] placeholder-slate-600 text-card-blue font-semibold text-[1em] placeholder-opacity-60 rounded-lg py-2 px-6 w-80 mb-4 focus:outline-none focus:border-[#1c5d66] focus:bg-[#90b2c52a] focus:text-lg transition-all hover:bg-[#ffffff44]"
       type={props.type || "text"}
       name={props.name} // Added name to associate the input with the state
       value={props.value} // Value binding for controlled input
@@ -32,12 +32,17 @@ const LoginForm = () => {
         try {
           // Decode the token to check if it's valid
           const decoded = jwtDecode(token);
+          console.log(decoded);
           const isExpired = decoded.exp < Date.now() / 1000;
-          const response = await fetch(
-            `http://localhost:4000/4kfellowhship?phone=${decoded.phone}&password=${decoded.password}`
-          );
+          const response = decoded.password
+            ? await fetch(
+                `http://localhost:4000/4kfellowhship?phone=${decoded.phone}&password=${decoded.password}`
+              )
+            : await fetch(
+                `http://localhost:4000/4kfellowhship?phone=${decoded.phone}`
+              );
           const data = await response.json();
-          console.log(data[0].password);
+          console.log("data", data[0]);
 
           // Check if user is found and password matches
           if (data && data.length > 0) {
@@ -65,7 +70,7 @@ const LoginForm = () => {
 
   // State to store phone number and password
   const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState(null);
   const [error, setError] = useState(""); // To store error message if login fails
 
   // Navigate to createUser route if user is new
@@ -115,7 +120,7 @@ const LoginForm = () => {
   // };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(password, phone);
+    console.log("Phone:", phone, "Password:", password);
 
     try {
       const response = await fetch(
@@ -130,6 +135,7 @@ const LoginForm = () => {
       );
       const data = await response.json();
       console.log("data", data);
+      console.log("Token from server:", data.token);
 
       if (response.ok && data.token) {
         setToken(data.token); // Save the token in AuthContext
@@ -146,7 +152,7 @@ const LoginForm = () => {
   return (
     <div className="flex justify-center items-center min-h-screen">
       <form
-        className="flex flex-col items-center bg-slate-100 bg-opacity-30 backdrop-blur-sm p-8 rounded-lg w-full max-w-sm"
+        className="flex flex-col items-center bg-gray-800 bg-opacity-30 backdrop-blur-sm p-8 rounded-lg w-full max-w-sm"
         onSubmit={handleSubmit}
       >
         <p className="text-[#2f678d] text-4xl mb-12 font-bold font-jolly-lodger">
@@ -172,12 +178,12 @@ const LoginForm = () => {
 
         <button
           type="submit"
-          className="bg-[#fff3ac] text-stone-700 py-3 w-80 rounded-lg mt-8 text-lg font-medium transition-all shadow-[0_0_10px_#faebd7,0_0_10px_#faebd7] hover:bg-[#FFD700] hover:shadow-none"
+          className="bg-[#fff3ac] text-stone-900 py-3 w-80 rounded-lg mt-8 text-lg font-medium transition-all shadow-[0_0_10px_#faebd7,0_0_10px_#faebd7] hover:bg-[#FFD700] hover:shadow-none"
         >
           Login
         </button>
 
-        <div className="text-[#10222e] pt-6 underline" onClick={BeMember}>
+        <div className="text-[#ffac7c] pt-6 underline" onClick={BeMember}>
           Be Member
         </div>
       </form>

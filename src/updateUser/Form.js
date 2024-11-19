@@ -2,6 +2,8 @@ import EditBox from "../components/EditBox";
 import React from "react";
 import EditIcon from "../components/EditIcon";
 import { useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../Authentication.js/AuthContext";
+import Image from "../imageUploader/Image";
 
 const UpdateForm = (props) => {
   const [Info, setInfo] = React.useState({
@@ -88,9 +90,11 @@ const UpdateForm = (props) => {
     const result = await response.json(); // Wait for the result
     console.log(result); // Log the response if needed
     setUpdate(true);
+    navigate("/");
   };
 
   const CreatePassword = () => {
+    const { token, setToken } = React.useContext(AuthContext);
     const [password, setPassword] = React.useState("");
     const [confirmPassword, setConfirmPassword] = React.useState("");
     const [error, setError] = React.useState("");
@@ -136,12 +140,38 @@ const UpdateForm = (props) => {
             body: JSON.stringify({ ...Info, password }),
           }
         );
-        console.log(response.json());
-
+        console.log(response.json(), Info.phone, password);
         if (response.ok) {
           setSuccess(true);
+          const phone = Info.phone;
+          try {
+            const response = await fetch(
+              "http://localhost:4000/4kfellowhship/login",
+              {
+                method: "POST", // Using POST for login
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ phone, password }), // Sending phone and password in the request body
+              }
+            );
+            const data = await response.json();
+            console.log("data", data);
+            console.log("Token from server:", data.token);
+
+            if (response.ok && data.token) {
+              setToken(data.token); // Save the token in AuthContext
+              localStorage.setItem("jwtToken", data.token); // Store token in localStorage
+              navigate("/"); // Redirect to the main page
+            } else {
+              setError(data.message || "Invalid phone number or password.");
+            }
+          } catch (err) {
+            setError("Error occurred while logging in. Please try again.");
+          }
           setPassword("");
           setConfirmPassword("");
+          navigate("/");
         } else {
           setError("Failed to create password");
           setSuccess(false);
@@ -153,10 +183,10 @@ const UpdateForm = (props) => {
     };
 
     return (
-      <div className="flex items-center justify-center  bg-gray-100">
+      <div className="flex items-center justify-center  bg-[#c7e8f738] mb-8  mx-40 rounded-3xl">
         <div className="p-8 rounded-lg w-full max-w-md">
           <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">
-            Create a password for security
+            {Info.firstname} please create a password for security issue
           </h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
@@ -205,14 +235,14 @@ const UpdateForm = (props) => {
               <button
                 name="submit"
                 type="submit"
-                className="w-full py-3 mx-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full py-3 mx-2 bg-[#e28132] text-white font-semibold rounded-md hover:bg-[#f79546] focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 Create Password
               </button>
               <button
                 name="skip"
                 onClick={() => navigate("/")} // Updated here for the skip button
-                className="w-[20%] py-3 mx-2  text-blue-500 font-semibold rounded-md hover:text-blue-900"
+                className="w-[20%] py-3 mx-2  text-blue-800 font-semibold rounded-md hover:text-blue-900"
               >
                 Skip
               </button>
@@ -222,16 +252,28 @@ const UpdateForm = (props) => {
       </div>
     );
   };
-  console.log(Info.password);
-  console.log(Info);
+  const setImgUrlInInfo = (url) => {
+    setInfo((prev) => ({
+      ...prev,
+      img: url,
+    }));
+  };
+  // margin: 0vw 0vw;
+  // padding: 0vw 0;
+  // display: flex;
+  // align-items: flex-start;
   return (
-    <div>
+    <div className="bg-[#f1efeb]">
       {Info.password === null ? <CreatePassword /> : null}
       <form id="update-form" onSubmit={handleUpdate}>
-        {Info.img ? <img src={Info.img} id="editimage" alt="Profile" /> : null}
+        {Info.img ? (
+          <img src={Info.img} id="editimage" alt="Profile" />
+        ) : (
+          <Image setImgUrlInInfo={setImgUrlInInfo} />
+        )}
         <h4>PERSONAL INFORMATION</h4>
-        <div id="upersonal-information">
-          <div id="p-i">
+        <div className="flex">
+          <div className="flex flex-wrap justify-center">
             <EditBox
               p="First Name"
               name="firstname"
@@ -267,8 +309,8 @@ const UpdateForm = (props) => {
         </div>
         <hr />
         <h4>ADDRESS LINE</h4>
-        <div id="uaddress">
-          <div id="a-l">
+        <div className="flex">
+          <div id="a-l" className="flex flex-wrap justify-center ">
             <EditBox
               name="country"
               p="Country"
@@ -299,9 +341,46 @@ const UpdateForm = (props) => {
               edit={editor.editmode2}
             />
           </div>
+
           <EditIcon onClick={EditMode} value="editmode2" />
         </div>
-        <button type="submit">Submit</button>
+        <hr />
+        <h4>MORE INFORMATION</h4>
+        <div id="umore-info" className="flex">
+          <div id="umore-infopart" className="flex justify-center flex-wrap">
+            <EditBox
+              name="department"
+              p="Department"
+              value={Info.department}
+              change={handleChange}
+              edit={editor.editmode3}
+            />
+            <br />
+            <EditBox
+              name="batch"
+              p="Batch"
+              value={Info.batch}
+              change={handleChange}
+              edit={editor.editmode3}
+            />
+            <br />
+            <EditBox
+              name="fav_verse"
+              p="Favorite Bible Verse"
+              value={Info.fav_verse}
+              change={handleChange}
+              edit={editor.editmode3}
+            />
+          </div>
+          <EditIcon onClick={EditMode} value="editmode3" />
+        </div>
+        <button
+          className="text-white text-[1em] bg-[#2c2c5a] py-[0.7em] px-[2em] rounded-xl hover:bg-[#393974] mb-4"
+          type="submit"
+          value="Update"
+        >
+          Update
+        </button>
       </form>
     </div>
   );
