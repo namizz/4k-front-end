@@ -98,7 +98,7 @@ const CardBox = ({ marked, user }) => {
   const [Info, setInfo] = React.useState([]);
 
   React.useEffect(() => {
-    fetch("http://localhost:4000/4kfellowhship")
+    fetch("${API_URL}")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Http error");
@@ -157,6 +157,9 @@ const CardBox = ({ marked, user }) => {
 };
 
 const Main = () => {
+  const API_URL = process.env.REACT_APP_API_URL;
+  console.log(API_URL, "api"); // Should log: ${API_URL}
+
   const { user, setUser } = useUser();
   console.log("user", user);
   const { logout } = useContext(AuthContext);
@@ -187,8 +190,8 @@ const Main = () => {
           // Construct the fetch URL depending on whether `password` is included
           const queryParams = `phone=${decoded.phone}`;
           const fetchUrl = decoded.password
-            ? `http://localhost:4000/4kfellowhship?${queryParams}&password=${decoded.password}`
-            : `http://localhost:4000/4kfellowhship?${queryParams}`;
+            ? `${API_URL}?${queryParams}&password=${decoded.password}`
+            : `${API_URL}?${queryParams}`;
 
           // Fetch user data based on the decoded information (e.g., phone and password)
           fetch(fetchUrl)
@@ -251,9 +254,7 @@ const Main = () => {
     if (!Verse.book) return;
     const fetchBookName = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:4000/4kfellowhship/api/book/${Verse.book}`
-        );
+        const response = await fetch(`${API_URL}/api/book/${Verse.book}`);
         if (!response.ok) {
           console.log("Error: Book not found");
           return;
