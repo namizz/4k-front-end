@@ -34,7 +34,11 @@ const UpdateForm = (props) => {
   console.log("phone", phone);
 
   React.useEffect(() => {
-    fetch(`http://localhost:4000/4kfellowhship?phone=${phone || "0991065050"}`)
+    fetch(
+      `https://aau-4k-fellowship.onrender.com/4kfellowhship?phone=${
+        phone || "0991065050"
+      }`
+    )
       .then((response) => response.json())
       .then((data) => {
         setInfo(data[0]);
@@ -74,13 +78,16 @@ const UpdateForm = (props) => {
       navigate("/"); // Now correctly using navigate here
     }
 
-    const response = await fetch(`http://localhost:4000/4kfellowhship/edit`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(Info),
-    });
+    const response = await fetch(
+      `https://aau-4k-fellowship.onrender.com/4kfellowhship/edit`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(Info),
+      }
+    );
 
     if (!response.ok) {
       console.log("Error in update");
@@ -131,7 +138,7 @@ const UpdateForm = (props) => {
 
       try {
         const response = await fetch(
-          "http://localhost:4000/4kfellowhship/edit",
+          "https://aau-4k-fellowship.onrender.com/4kfellowhship/edit",
           {
             method: "PATCH",
             headers: {
@@ -146,7 +153,7 @@ const UpdateForm = (props) => {
           const phone = Info.phone;
           try {
             const response = await fetch(
-              "http://localhost:4000/4kfellowhship/login",
+              "https://aau-4k-fellowship.onrender.com/4kfellowhship/login",
               {
                 method: "POST", // Using POST for login
                 headers: {

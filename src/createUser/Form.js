@@ -80,13 +80,16 @@ const Form = () => {
     //post the json file to the backend
     if (requiredUnfilled()) {
       try {
-        const response = await fetch("http://localhost:4000/4kfellowhship", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(Info),
-        });
+        const response = await fetch(
+          "https://aau-4k-fellowship.onrender.com/4kfellowhship",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(Info),
+          }
+        );
         const m = await response.json();
         if (response.ok) {
           setSubmit("The Information has been Submitted!");

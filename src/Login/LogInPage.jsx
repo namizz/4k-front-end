@@ -36,10 +36,10 @@ const LoginForm = () => {
           const isExpired = decoded.exp < Date.now() / 1000;
           const response = decoded.password
             ? await fetch(
-                `http://localhost:4000/4kfellowhship?phone=${decoded.phone}&password=${decoded.password}`
+                `https://aau-4k-fellowship.onrender.com/4kfellowhship?phone=${decoded.phone}&password=${decoded.password}`
               )
             : await fetch(
-                `http://localhost:4000/4kfellowhship?phone=${decoded.phone}`
+                `https://aau-4k-fellowship.onrender.com/4kfellowhship?phone=${decoded.phone}`
               );
           const data = await response.json();
           console.log("data", data[0]);
@@ -96,7 +96,7 @@ const LoginForm = () => {
   //   console.log("phone", phone, "password", password);
   //   try {
   //     const response = await fetch(
-  //       `http://localhost:4000/4kfellowhship?phone=${phone}&password=${password}`
+  //       `https://aau-4k-fellowship.onrender.com/4kfellowhship?phone=${phone}&password=${password}`
   //     );
   //     const data = await response.json();
   //     console.log(data[0].password);
@@ -124,7 +124,7 @@ const LoginForm = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:4000/4kfellowhship/login",
+        "https://aau-4k-fellowship.onrender.com/4kfellowhship/login",
         {
           method: "POST", // Using POST for login
           headers: {
