@@ -1,8 +1,11 @@
 const Deletor = (props) => {
   const Click = () => {
-    fetch(`http://localhost:4000/4kfellowhship?phone=${props.phone}`, {
-      method: "DELETE",
-    })
+    fetch(
+      `https://aau-4k-fellowship.onrender.com/4kfellowhship?phone=${props.phone}`,
+      {
+        method: "DELETE",
+      }
+    )
       .then((response) => {
         if (response.ok) {
           props.onDeleteSuccess(); // Notify parent that delete was successful
