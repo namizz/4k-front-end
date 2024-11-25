@@ -67,7 +67,7 @@ const InputSection = ({ props }) => {
     <input
       className={` p-2.5 pb-3.5 pl-2 text-sm bg-transparent border-b border-gray-300 ${
         props.display && !props.value
-          ? props.display != "none"
+          ? props.display !== "none"
             ? "border-red-600"
             : "border-red-800 border-opacity-20"
           : null

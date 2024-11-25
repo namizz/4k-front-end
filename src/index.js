@@ -4,12 +4,7 @@ import "./index.css";
 import Form from "./createUser/Form";
 import Header from "./components/Header";
 import UpdateForm from "./updateUser/Form";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  BrowserRouter,
-} from "react-router-dom";
+import { Route, Routes, BrowserRouter } from "react-router-dom";
 import Main from "./Main/Main";
 import LoginPage from "./Login/LogInPage";
 import { UserProvider } from "./UserContent/UserContent"; // Import UserProvider

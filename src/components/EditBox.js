@@ -22,7 +22,7 @@ const EditBox = (props) => {
         ⚠️ Please enter {props.name}
       </p>
       <p
-        style={props.msg == "" ? { display: "none" } : { display: "flex" }}
+        style={props.msg === "" ? { display: "none" } : { display: "flex" }}
         className="message"
       >
         {props.msg}
