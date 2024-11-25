@@ -210,6 +210,9 @@ const Form = () => {
             display={required.ba}
           />
           <br />
+          <p className="text-sm text-gray-700 font-[600] mx-[2vw] py-[1vw]">
+            Upload profile pic
+          </p>
           <Image setImgUrlInInfo={setImgUrlInInfo} />
           <InputBox
             name="fav_verse"

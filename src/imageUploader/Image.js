@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import FileUpload from "./FileUpload";
 
-const Image = ({ setImgUrlInInfo }) => {
+const Image = ({ setImgUrlInInfo, imgg }) => {
   const [imageUrl, setImageUrl] = useState(""); // State to hold the image URL
   const [isUploaded, setIsUploaded] = useState(false);
 
@@ -33,7 +33,6 @@ const Image = ({ setImgUrlInInfo }) => {
 
   return (
     <div id="image-uploader">
-      <p className="boxname">Upload profile pic</p>
       <p
         style={isUploaded ? { display: "flex" } : { display: "none" }}
         className="message"
@@ -42,7 +41,7 @@ const Image = ({ setImgUrlInInfo }) => {
         ✅Profile picture uploaded successfully
       </p>
       <FileUpload
-        imageLink={imageUrl}
+        imageLink={imageUrl || imgg}
         onFileSelect={handleFileSelect}
         display={isUploaded ? "none" : "flex"}
       />

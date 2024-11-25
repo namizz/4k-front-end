@@ -10,7 +10,7 @@ const Input = (props) => {
   return (
     <input
       placeholder={`${props.msg || "(e.g 0991065050)"} `}
-      className="bg-transparent border-b-2 border-[#ebf1f0] placeholder-slate-600 text-card-blue font-semibold text-[1em] placeholder-opacity-60 rounded-lg py-2 px-6 w-80 mb-4 focus:outline-none focus:border-[#1c5d66] focus:bg-[#90b2c52a] focus:text-lg transition-all hover:bg-[#ffffff44]"
+      className="bg-transparent border-b-2 border-[#ebf1f0] placeholder-[#000] text-[#000000] font-semibold text-[1em] placeholder-opacity-60 rounded-lg py-2 px-6 w-80 mb-4 focus:outline-none focus:border-[#ffd689] focus:text-lg transition-all hover:bg-[#ffffff1e]"
       type={props.type || "text"}
       name={props.name} // Added name to associate the input with the state
       value={props.value} // Value binding for controlled input
@@ -178,12 +178,15 @@ const LoginForm = () => {
 
         <button
           type="submit"
-          className="bg-[#fff3ac] text-stone-900 py-3 w-80 rounded-lg mt-8 text-lg font-medium transition-all shadow-[0_0_10px_#faebd7,0_0_10px_#faebd7] hover:bg-[#FFD700] hover:shadow-none"
+          className="bg-gradient-to-br from-[#ffef93] to-[#fcb045] text-blue-800 py-3 w-80 rounded-lg mt-8 text-lg font-medium  hover:from-[#fff176] hover:to-[#ffd54f] transition-all duration-600 "
         >
           Login
         </button>
 
-        <div className="text-[#ffac7c] pt-6 underline" onClick={BeMember}>
+        <div
+          className="text-[#f3e17ade] bg-slate-600 p-1 px-4 rounded-xl bg-opacity-35 mt-6 hover:text-green-200 hover:bg-opacity-80 hover:bg-slate-800 transition-all duration-100"
+          onClick={BeMember}
+        >
           Be Member
         </div>
       </form>
