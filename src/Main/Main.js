@@ -98,7 +98,7 @@ const CardBox = ({ marked, user }) => {
   const [Info, setInfo] = React.useState([]);
 
   React.useEffect(() => {
-    fetch("${API_URL}")
+    fetch("http://localhost:4000/4kfellowhship")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Http error");
@@ -158,7 +158,7 @@ const CardBox = ({ marked, user }) => {
 
 const Main = () => {
   const API_URL = process.env.REACT_APP_API_URL;
-  console.log(API_URL, "api"); // Should log: ${API_URL}
+  console.log(API_URL, "api"); // Should log: http://localhost:4000/4kfellowhship
 
   const { user, setUser } = useUser();
   console.log("user", user);
@@ -190,8 +190,8 @@ const Main = () => {
           // Construct the fetch URL depending on whether `password` is included
           const queryParams = `phone=${decoded.phone}`;
           const fetchUrl = decoded.password
-            ? `${API_URL}?${queryParams}&password=${decoded.password}`
-            : `${API_URL}?${queryParams}`;
+            ? `http://localhost:4000/4kfellowhship?${queryParams}&password=${decoded.password}`
+            : `http://localhost:4000/4kfellowhship?${queryParams}`;
 
           // Fetch user data based on the decoded information (e.g., phone and password)
           fetch(fetchUrl)
@@ -209,7 +209,7 @@ const Main = () => {
         setToken(null); // Clear invalid token
       }
     } else {
-      console.error("Token is null or invalid:", token);
+      console.error("Token is null or invalid:");
     }
   }, [token, user, setToken, setUser]);
 
@@ -254,7 +254,9 @@ const Main = () => {
     if (!Verse.book) return;
     const fetchBookName = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/book/${Verse.book}`);
+        const response = await fetch(
+          `http://localhost:4000/4kfellowhship/api/book/${Verse.book}`
+        );
         if (!response.ok) {
           console.log("Error: Book not found");
           return;
@@ -283,13 +285,13 @@ const Main = () => {
     <div className="bg-white">
       <Header />
       {user ? (
-        <div className="">
+        <div>
           <img
             src={
               user.img ||
               "https://static.vecteezy.com/system/resources/previews/003/715/527/non_2x/picture-profile-icon-male-icon-human-or-people-sign-and-symbol-vector.jpg"
             }
-            alt="user image"
+            alt="user-image"
             className="w-20 rounded-full h-20 object-cover absolute top-[0.5em] right-[6em] border-4 border-blue-950 border-opacity-10"
           />
           <button
