@@ -22,8 +22,6 @@ const UpdateForm = (props) => {
     password: "",
   });
 
-  const [update, setUpdate] = React.useState(false);
-
   // Initialize useNavigate hook here at the component level
   const navigate = useNavigate();
 
@@ -46,7 +44,7 @@ const UpdateForm = (props) => {
       .catch((err) => {
         console.log("Error fetching data:", err);
       });
-  }, []);
+  }, [phone]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -96,12 +94,11 @@ const UpdateForm = (props) => {
 
     const result = await response.json(); // Wait for the result
     console.log(result); // Log the response if needed
-    setUpdate(true);
     navigate("/");
   };
 
   const CreatePassword = () => {
-    const { token, setToken } = React.useContext(AuthContext);
+    const { setToken } = React.useContext(AuthContext);
     const [password, setPassword] = React.useState("");
     const [confirmPassword, setConfirmPassword] = React.useState("");
     const [error, setError] = React.useState("");
