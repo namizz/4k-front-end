@@ -357,6 +357,7 @@ const UpdateForm = (props) => {
               p="Phone Number"
               value={Info.phone}
               change={handleChange}
+              edit={Info.church === "Leader" ? editor.editmode2 : "null"}
             />
             <EditBox
               name="email"
