@@ -307,6 +307,28 @@ const UpdateForm = (props) => {
               value={Info.church}
               change={handleChange}
               edit={editor.editmode1}
+              type="combo"
+              options={
+                Info.church === "Leader"
+                  ? [
+                      "Member",
+                      "Prayer",
+                      "Bible Study",
+                      "Leader",
+                      "Evangelical",
+                      "Worship",
+                      "Literature",
+                    ]
+                  : [
+                      "Member",
+                      "Prayer",
+                      "Bible Study",
+                      // "Leader",
+                      "Evangelical",
+                      "Worship",
+                      "Literature",
+                    ]
+              }
             />
           </div>
           <EditIcon onClick={EditMode} value="editmode1" />

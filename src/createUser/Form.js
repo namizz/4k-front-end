@@ -146,7 +146,7 @@ const Form = () => {
               "Member",
               "Prayer",
               "Bible Study",
-              "Leader",
+              // "Leader",
               "Evangelical",
               "Worship",
               "Literature",
