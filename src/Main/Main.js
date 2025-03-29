@@ -255,7 +255,7 @@ const Main = () => {
     const fetchBookName = async () => {
       try {
         const response = await fetch(
-          `http://localhost:10000/4kfellowhship/api/book/${Verse.book}`
+          `https://aau-4k-fellowship.onrender.com/4kfellowhship/api/book/${Verse.book}`
         );
         if (!response.ok) {
           console.log("Error: Book not found");

@@ -13,7 +13,7 @@ const Image = ({ setImgUrlInInfo, imgg }) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/4kfellowhship/upload",
+        "https://aau-4k-fellowship.onrender.com/4kfellowhship/upload",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

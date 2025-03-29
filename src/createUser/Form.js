@@ -78,6 +78,7 @@ const Form = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     //post the json file to the backend
+    console.log(Info);
     if (requiredUnfilled()) {
       try {
         const response = await fetch(
@@ -94,7 +95,8 @@ const Form = () => {
         if (response.ok) {
           setSubmit("The Information has been Submitted!");
           setExisting("");
-          navigate(`/update?phone=${Info.phone}`);
+          // navigate(`/update?phone=${Info.phone}`);
+          navigate("/");
 
           console.log("Data submitted successfully");
         } else {
